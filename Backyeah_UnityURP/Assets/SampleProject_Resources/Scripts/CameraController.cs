@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour
 	public GameObject Target;
 
     private float CamOffset;
-    public float rotateX, rotateY;
+    private float rotateX, rotateY;
 
     private void Start()
     {
