@@ -29,9 +29,11 @@ public class PlayerController : MonoBehaviour
 
 		// 카메라 x, y축 회전
 		float mouseX = Input.GetAxis("Mouse X");	// 마우스 좌/우 움직임
-		float mouseY = Input.GetAxis("Mouse Y");	// 마우스 위/아래 움직임
+		float mouseY = Input.GetAxis("Mouse Y");    // 마우스 위/아래 움직임
 
-		cameraController.RotateTo(mouseX, mouseY);
+		float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
+
+		cameraController.RotateTo(mouseX, mouseY, mouseScroll);
 	}
 	
 	/// CharacterController 컴포넌트를 가지고 있는 게임오브젝트에서 호출 가능

@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.UIElements;
+﻿using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
@@ -18,10 +16,11 @@ public class CameraController : MonoBehaviour
         rotateY = Mathf.Asin(tmp.y / CamOffset) * Mathf.Rad2Deg;
     }
 
-    public void RotateTo(float mouseX, float mouseY)
+    public void RotateTo(float mouseX, float mouseY, float mouseScroll)
 	{
         rotateX -= mouseX;
         rotateY -= mouseY;
+        CamOffset -= mouseScroll;
 
         rotateY = ClampAngle(rotateY, -80, 50);
 
@@ -34,8 +33,17 @@ public class CameraController : MonoBehaviour
 
         transform.position = CamPos;
         transform.LookAt(Target.transform.position);
-    }
 
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position, transform.forward);
+        if (Physics.Raycast(ray, out hit, CamOffset))
+        {
+            if (hit.point != Vector3.zero)
+            {
+                transform.transform.position = hit.point;
+            }
+        }
+    }
 
     private float ClampAngle(float angle, float min, float max)
 	{
