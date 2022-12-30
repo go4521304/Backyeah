@@ -107,3 +107,7 @@ $RECYCLE.BIN/
 
 # Except to Excel .meta Files
 *.xlsx.meta
+
+
+# Except .vsconfig
+*.vsconfig

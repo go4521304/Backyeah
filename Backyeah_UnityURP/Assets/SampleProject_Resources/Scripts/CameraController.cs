@@ -1,31 +1,43 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CameraController : MonoBehaviour
 {
-	private	float	rotateSpeedX = 3;
-	private	float	rotateSpeedY = 5;
-	private	float	limitMinX = -80;
-	private	float	limitMaxX = 50;
-	private	float	eulerAngleX;
-	private	float	eulerAngleY;
+	public GameObject Target;
 
-	public void RotateTo(float mouseX, float mouseY)
+    private float CamOffset;
+    public float rotateX, rotateY;
+
+    private void Start()
+    {
+        CamOffset = (Target.transform.position - transform.position).magnitude;
+
+        Vector3 tmp = transform.position - Target.transform.position;
+        rotateX = Mathf.Atan2(tmp.z, tmp.x) * Mathf.Rad2Deg;
+        rotateY = Mathf.Asin(tmp.y / CamOffset) * Mathf.Rad2Deg;
+    }
+
+    public void RotateTo(float mouseX, float mouseY)
 	{
-		// 마우스를 좌/우로 움직이는 mouseX 값을 y축에 대입하는 이유는
-		// 마우스를 좌/우로 움직일 때 카메라도 좌/우를 보려면 카메라 오브젝트의
-		// y축이 회전되어야 하기 때문
-		eulerAngleY += mouseX * rotateSpeedX;
-		// 같은 개념으로 카메라가 위/아래를 보려면 카메라 오브젝트의 x축이 회전!
-		eulerAngleX -= mouseY * rotateSpeedY;
+        rotateX -= mouseX;
+        rotateY -= mouseY;
 
-		// x축 회전 값의 경우 아래, 위를 볼 수 있는 제한 각도가 설정되어 있다
-		eulerAngleX = ClampAngle(eulerAngleX, limitMinX, limitMaxX);
+        rotateY = ClampAngle(rotateY, -80, 50);
 
-		// 실제 오브젝트의 쿼터니온 회전에 적용
-		transform.rotation = Quaternion.Euler(eulerAngleX, eulerAngleY, 0);
-	}
+        float X = rotateX * Mathf.Deg2Rad, Y = rotateY * Mathf.Deg2Rad;
+        Vector3 CamPos = new Vector3();
+        CamPos.x = CamOffset * Mathf.Cos(X) * Mathf.Cos(Y);
+        CamPos.y = CamOffset * Mathf.Sin(Y);
+        CamPos.z = CamOffset * Mathf.Cos(Y) * Mathf.Sin(X);
+        CamPos += Target.transform.position;
 
-	private float ClampAngle(float angle, float min, float max)
+        transform.position = CamPos;
+        transform.LookAt(Target.transform.position);
+    }
+
+
+    private float ClampAngle(float angle, float min, float max)
 	{
 		if ( angle < -360 )	angle += 360;
 		if ( angle > 360 )	angle -= 360;
