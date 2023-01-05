@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour
         Ray ray = new Ray(transform.position, transform.forward);
         if (Physics.Raycast(ray, out hit, CamOffset))
         {
-            if (hit.point != Vector3.zero)
+            if (hit.point != Vector3.zero && hit.collider.gameObject != Target)
             {
                 transform.transform.position = hit.point;
             }
