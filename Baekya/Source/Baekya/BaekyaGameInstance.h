@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Engine/DataTable.h"
-#include "RequestGameInstance.generated.h"
+#include "BaekyaGameInstance.generated.h"
 
 USTRUCT()
 struct FREQUEST : public FTableRowBase
@@ -24,12 +24,12 @@ struct FREQUEST : public FTableRowBase
  * 
  */
 UCLASS()
-class BAEKYA_API URequestGameInstance : public UGameInstance
+class BAEKYA_API UBaekyaGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
 public:
-	URequestGameInstance();
+	UBaekyaGameInstance();
 
 	FREQUEST* GetReq(int32 idx);
 
